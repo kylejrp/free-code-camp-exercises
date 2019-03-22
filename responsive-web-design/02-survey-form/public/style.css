@@ -1,0 +1,74 @@
+main, textarea {
+font-family: 'Source Sans Pro', sans-serif;
+}
+main{
+  margin-top: 3em;
+}
+
+h1 {
+  font-family: 'Libre Baskerville', serif;
+  border-left: .2em solid #ccc;
+  padding: .1em .4em ;
+  margin-left: .2em;
+}
+.form-container {
+  border: 1px solid #ccc;
+  display: flex;
+  padding: 1em;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-bottom: 1em;
+}
+
+@media (min-width: 576px) {
+  .form-row {
+    flex-direction: row;
+  }
+  .label, .input {
+    
+  flex-basis: 0;
+  }
+}
+
+.label, .input {
+  flex-grow: 1;
+  flex-shrink: 0;
+  padding: .25em;
+}
+.label {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+.input {
+  border: 1px solid #ccc;
+}
+.boxes {
+  display: flex;
+  flex-direction: column;
+}
+
+.boxes label {
+  padding: .2em;
+}
+
+.boxes input {
+  margin-right: .67em;
+}
+
+.submit {
+  padding: .75em;
+  font-size: 1.25em;
+  background-color: #ccc;
+  transition: background-color 0.5s ease;
+  cursor: pointer;
+}
+
+.submit:hover{
+  background-color: #eee;
+}
