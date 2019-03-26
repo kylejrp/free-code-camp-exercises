@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Documentation</title>
+  <link href="style.css" rel="stylesheet">
+  <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab" rel="stylesheet">
+  <link href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/atelier-cave-light.css"
+    rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+
+<body>
+
+  <div id="docs">
+    <nav id="navbar">
+      <header>
+        <h1>Promise Documentation</h1>
+      </header>
+      <a class="nav-link" href="#Promise">Promise</a>
+      <a class="nav-link" href="#Syntax">Syntax</a>
+      <a class="nav-link" href="#Description">Description</a>
+      <a class="nav-link" href="#Properties">Properties</a>
+      <a class="nav-link" href="#Methods">Methods</a>
+      <a class="nav-link" href="#Promises_Prototype">Promises Prototype</a>
+      <a class="nav-link" href="#Creating_a_Promise">Creating a Promise</a>
+      <a class="nav-link" href="#Examples">Examples</a>
+    </nav>
+    <main id="main-doc">
+      <section class="main-section" id="Promise">
+        <header>
+          <h2>Promise</h2>
+        </header>
+        <p>The <code class="inline-code font-weight-bold">Promise</code> object represents the eventual completion (or
+          failure) of an asynchronous operation, and its resulting value.</p>
+        <p class="note"><span class="font-weight-bold">Note: </span>This article describes the <code
+            class="inline-code font-weight-bold">Promise</code> constructor and the methods and properties of such
+          objects. To learn about the way promises work and how you can use them,
+          we advise you to read <a href="#">Using promises</a> first. The constructor is primarily used to wrap
+          functions that do not already support promises.</p>
+        <code class="block-code prettyprint linenums">var promise1 = new Promise(function(resolve, reject) {
+  setTimeout(function() {
+    resolve('foo');
+  }, 300);
+});
+
+promise1.then(function(value) {
+  console.log(value);
+  // expected output: "foo"
+});
+
+console.log(promise1);
+// expected output: [object Promise]</code>
+      </section>
+      <section class="main-section" id="Syntax">
+        <header>
+          <h2>Syntax</h2>
+        </header>
+        <code class="inline-code font-weight-bold">new Promise(<em>executor</em>)</code>
+        <h3>Parameters</h3>
+        <ul>
+          <li><code class="inline-code font-weight-bold">executor</code>
+            <p>A function that is passed with the arguments <code class="inline-code">resolve</code> and <code
+                class="inline-code">reject</code>. The executor function is executed immediately by the Promise
+              implementation, passing <code class="inline-code">resolve</code> and <code
+                class="inline-code">reject</code> functions (the executor is called before the <code
+                class="inline-code">Promise</code> constructor even returns the created object). The <code
+                class="inline-code">resolve</code> and <code class="inline-code">reject</code> functions, when called,
+              resolve or reject the promise, respectively. The executor normally initiates some asynchronous work, and
+              then, once that completes, either calls the resolve function to resolve the promise or else rejects it if
+              an error
+              occurred. If an error is thrown in the executor function, the promise is rejected. The return value of the
+              executor is ignored.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="main-section" id="Description">
+        <header>
+          <h2>Description</h2>
+        </header>
+        <p>A <code class="inline-code font-weight-bold">Promise</code> is a proxy for a value not necessarily known when
+          the promise is created. It allows you to associate handlers with an asynchronous action's eventual success
+          value or failure reason. This
+          lets asynchronous methods return values like synchronous methods: instead of immediately returning the final
+          value, the asynchronous method returns a <em>promise</em> to supply the value at some point in the future.</p>
+        <p>A <code class="inline-code">Promise</code> is in one of these states:
+        <ul>
+          <li><em>pending:</em> initial state, neither fulfilled nor rejected.</li>
+          <li><em>fulfilled:</em> meaning that the operation completed successfully.</li>
+          <li><em>rejected:</em> meaning that the operation failed.
+        </ul>
+        <p>A pending promise can either be <em>fulfilled</em> with a value, or <em>rejected</em> with a reason (error).
+          When either of these options happens, the associated handlers queued up by a promise's <code
+            class="inline-code">then</code> method are
+          called. (If the promise has already been fulfilled or rejected when a corresponding handler is attached, the
+          handler will be called, so there is no race condition between an asynchronouos operation completing and its
+          handlers being attached.)</p>
+        <p>As the <code class="inline-code"><a href="#Promise_prototype_then">Promise.prototype.then()</a></code> and
+          <code class="inline-code"><a href="#Promise_prototype_catch">Promise.prototype.catch()</a></code> methods
+          return promises, they can be chained.</p>
+        <img src="https://mdn.mozillademos.org/files/15911/promises.png">
+        <p class="note"><span class="font-weight-bold">Not to be confused with: </span>Several other languages have
+          mechanisms for lazy evaluation and deferring a computation, which they also call "promises", e.g. Scheme.
+          Promises in JavaScript represent processes which
+          are already happening, which can be chained with callback functions. If you are looking to lazily evaluate an
+          expression, consider the arrow function with no arguments: <code
+            class="inline-code">f = () => <em>expression</em></code> to create the
+          lazily-evaluated expression, and <code class="inline-code">f()</code> to evaluate.</p>
+        <p class="note"><span class="font-weight-bold">Note: </span>A promise is said to be <em>settled</em> if it is
+          either fulfilled or rejected, but not pending. You will also hear the term <em>resolved</em> used with
+          promises — this means that the promise is settled
+          or "locked in" to match the state of another promise. <a
+            href="https://github.com/domenic/promises-unwrapping/blob/master/docs/states-and-fates.md"
+            target="_blank">States and fates</a> contains more details about promise terminology.</p>
+
+        </p>
+      </section>
+
+      <section class="main-section" id="Properties">
+        <header>
+          <h2>Properties</h2>
+        </header>
+        <ul>
+          <li><code class="inline-code">Promise.length</code>
+            <p>Length property whose value is always 1 (number of constructor arguments)</p>
+          </li>
+          <li><code class="inline-code">Promise.prototype</code>
+            <p>Represents the prototype for the <code class="inline-code">Promise</code> constructor.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="main-section" id="Methods">
+        <header>
+          <h2>Methods</h2>
+        </header>
+        <ul>
+          <li><code class="inline-code">Promise.all(iterable)</code>
+            <p>Returns a promise that either fulfills when all of the promises in the iterable argument have fulfilled
+              or rejects as soon as one of the promises in the iterable argument rejects. If the returned promise
+              fulfills, it is fulfilled with an array
+              of the values from the fulfilled promises in the same order as defined in the iterable. If the returned
+              promise rejects, it is rejected with the reason from the first promise in the iterable that rejected. This
+              method can be useful for aggregating
+              results of multiple promises.
+            </p>
+          </li>
+          <li><code class="inline-code">Promise.race(iterable)</code>
+            <p>Returns a promise that fulfills or rejects as soon as one of the promises in the iterable fulfills or
+              rejects, with the value or reason from that promise.</p>
+          </li>
+          <li><code class="inline-code">Promise.reject()</code>
+            <p>Returns a Promise object that is rejected with the given reason.</p>
+          </li>
+          <li><code class="inline-code">Promise.resolve()</code>
+            <p>Returns a <code class="inline-code">Promise</code> object that is resolved with the given value. If the
+              value is a thenable (i.e. has a <code class="inline-code">then</code> method), the returned promise will
+              "follow" that thenable, adopting its
+              eventual state; otherwise the returned promise will be fulfilled with the value. Generally, if you don't
+              know if a value is a promise or not, <code class="inline-code">Promise.resolve(value)</code> it instead
+              and work with the return value as
+              a promise.</p>
+          </li>
+        </ul>
+      </section>
+      <section class="main-section" id="Promises_Prototype">
+        <header>
+          <h2>Promises Prototype</h2>
+        </header>
+        <h3>Properties</h3>
+        <ul>
+          <li><code class="inline-code">Promise.prototype.constructor</code>
+            <p>Returns the function that created an instance's prototype. This is the <code
+                class="inline-code">Promise</code> function by default.</p>
+          </li>
+        </ul>
+        <h3>Properties</h3>
+        <ul>
+          <li id="Promise_prototype_catch"><code class="inline-code">Promise.prototype.catch()</code>
+            <p>Appends a rejection handler callback to the promise, and returns a new promise resolving to the return
+              value of the callback if it is called, or to its original fulfillment value if the promise is instead
+              fulfilled.</p>
+          </li>
+          <li id="Promise_prototype_then"><code class="inline-code">Promise.prototype.then()</code>
+            <p>Appends fulfillment and rejection handlers to the promise, and returns a new promise resolving to the
+              return value of the called handler, or to its original settled value if the promise was not handled (i.e.
+              if the relevant handler <code class="inline-code">onFulfilled</code> or <code
+                class="inline-code">onRejected</code> is not a function).</p>
+          </li>
+          <li id="#Promise_prototype_finally"><code class="inline-code">Promise.prototype.finally()</code>
+            <p>Appends a handler to the promise, and returns a new promise which is resolved when the original promise
+              is resolved. The handler is called when the promise is settled, whether fulfilled or rejected. Creating a
+              Promise</p>
+          </li>
+        </ul>
+      </section>
+      <section class="main-section" id="Creating_a_Promise">
+        <header>
+          <h2>Creating a Promise</h2>
+        </header>
+        <p>A <code class="inline-code">Promise</code> object is created using the <code class="inline-code">new</code>
+          keyword and its constructor. This constructor takes as its argument a function, called the "executor
+          function". This function should take two
+          functions as parameters. The first of these functions (<code class="inline-code">resolve</code>) is called
+          when the asynchronous task completes successfully and returns the results of the task as a value. The second
+          (<code class="inline-code">reject</code>)
+          is called when the task fails, and returns the reason for failure, which is typically an error object.</p>
+        <code class="block-code prettyprint linenums">const myFirstPromise = new Promise((resolve, reject) => {
+        // do something asynchronous which eventually calls either:
+        //
+        //   resolve(someValue); // fulfilled
+        // or
+        //   reject("failure reason"); // rejected
+      });</code>
+        <p>To provide a function with promise functionality, simply have it return a promise:</p>
+        <code class="block-code prettyprint linenums">function myAsyncFunction(url) {
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", url);
+    xhr.onload = () => resolve(xhr.responseText);
+    xhr.onerror = () => reject(xhr.statusText);
+    xhr.send();
+  });
+}</code>
+      </section>
+      <section class="main-section" id="Examples">
+        <header>
+          <h2>Examples</h2>
+        </header>
+      </section>
+      <h3>Basic Example</h3>
+      <code class="block-code prettyprint linenums">let myFirstPromise = new Promise((resolve, reject) => {
+  // We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed.
+  // In this example, we use setTimeout(...) to simulate async code. 
+  // In reality, you will probably be using something like XHR or an HTML5 API.
+  setTimeout(function(){
+    resolve("Success!"); // Yay! Everything went well!
+  }, 250);
+});
+
+myFirstPromise.then((successMessage) => {
+  // successMessage is whatever we passed in the resolve(...) function above.
+  // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+  console.log("Yay! " + successMessage);
+});</code>
+
+      <h3>Advanced Example</h3>
+      <p>This small example shows the mechanism of a <code class="inline-code">Promise</code>. The <code
+          class="inline-code">testPromise()</code> method is called each time the <code
+          class="inline-code">&ltbutton&gt</code> is clicked. It creates a promise that
+        will be fulfilled, using <code class="inline-code">window.setTimeout()</code>, to the promise count (number
+        starting from 1) every 1-3 seconds, at random. The <code class="inline-code">Promise()</code> constructor is
+        used to create the promise.</p>
+      <p>The fulfillment of the promise is simply logged, via a fulfill callback set using <code
+          class="inline-code">p1.then()</code>. A few logs show how the synchronous part of the method is decoupled from
+        the asynchronous completion of the promise.</p>
+      <code class="block-code prettyprint linenums">'use strict';
+    var promiseCount = 0;
+    
+    function testPromise() {
+      let thisPromiseCount = ++promiseCount;
+      
+      let log = document.getElementById('log');
+      log.insertAdjacentHTML('beforeend', thisPromiseCount +
+      ') Started (&ltsmall&gtSync code started&lt/small&gt)&ltbr/&gt');
+      
+      // We make a new promise: we promise a numeric count of this promise, starting from 1 (after waiting 3s)
+      let p1 = new Promise(
+        // The executor function is called with the ability to resolve or
+        // reject the promise
+        (resolve, reject) => {
+          log.insertAdjacentHTML('beforeend', thisPromiseCount +
+          ') Promise started (&ltsmall&gtAsync code started&lt/small&gt)&ltbr/&gt');
+          // This is only an example to create asynchronism
+          window.setTimeout(
+            function() {
+              // We fulfill the promise !
+              resolve(thisPromiseCount);
+            }, Math.random() * 2000 + 1000);
+          }
+          );
+          
+          // We define what to do when the promise is resolved with the then() call,
+          // and what to do when the promise is rejected with the catch() call
+          p1.then(
+            // Log the fulfillment value
+            function(val) {
+              log.insertAdjacentHTML('beforeend', val +
+              ') Promise fulfilled (&ltsmall&gtAsync code terminated&lt/small&gt)&ltbr/&gt');
+            }).catch(
+              // Log the rejection reason
+              (reason) => {
+                console.log('Handle rejected promise ('+reason+') here.');
+              });
+              
+              log.insertAdjacentHTML('beforeend', thisPromiseCount +
+              ') Promise made (&ltsmall&gtSync code terminated&lt/small&gt)&ltbr/&gt');
+            }</code>
+      <section id="Original_Source">
+        <header>
+          <h2>Original Source</h2>
+        </header>
+        <p>
+          <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"
+            target="_blank">
+            Original Article from MDN
+          </a>
+        </p>
+      </section>
+    </main>
+  </div>
+
+</body>
+
+</html>

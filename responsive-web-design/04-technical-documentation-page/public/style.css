@@ -1,0 +1,75 @@
+:root {
+  font-family: "Roboto", sans-serif;
+  margin: 1em;
+
+  --canary: #ffff99;
+  --dark-canary: #ffff66;
+}
+
+header {
+  font-family: "Roboto Slab", serif;
+}
+
+p {
+  line-height: 1.5em;
+}
+
+.block-code,
+.inline-code {
+  background-color: #ddd;
+  white-space: pre-wrap;
+}
+
+.block-code {
+  display: block;
+  padding: 1em 0.75em;
+  border-radius: 0.5em;
+  box-shadow: 5px 5px #ccc;
+  cursor: text;
+}
+
+.inline-code {
+  display: inline;
+  padding: 0.25em;
+  border-radius: 0.25em;
+}
+
+a[href] {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a[href]:hover {
+  text-decoration: underline;
+}
+
+.font-weight-bold {
+  font-weight: 600;
+}
+
+.note {
+  background-color: var(--canary);
+  padding: 1em;
+  box-shadow: 5px 5px var(--dark-canary);
+  border-radius: 0.5em;
+}
+
+.nav-link {
+  display: block;
+  border-bottom: 1px solid #ccc;
+  line-height: 1.5em;
+}
+
+@media (min-width: 920px){
+  #docs {
+    grid-template-columns: 350px 1fr;
+    display: grid;
+  }
+  
+  #navbar{
+    margin-right: 2em;
+  }
+}
+
+/* Hotfix, this works by default on codepen but not here 🤷‍♂️ */
+.prettyprint ol.linenums > li { list-style-type: decimal; }
